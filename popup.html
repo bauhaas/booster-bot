@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root {
+      --common: #d9c9a3;    --common-ink: #5c4a24;  --common-bg: #faf6ec;
+      --uncommon: #2e7d32;  --uncommon-bg: #edf6ee;
+      --rare: #1565c0;      --rare-bg: #eaf2fb;
+      --epic: #7b1fa2;      --epic-bg: #f4ebf8;
+      --legendary: #c62828; --legendary-bg: #fdecec;
+      --muted: #777;
+      --line: #e4e4e4;
+    }
+    * { box-sizing: border-box; }
+    body { font: 13px system-ui, sans-serif; width: 360px; margin: 0; color: #222; background: #fff; }
+    header { display: flex; gap: 8px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    header label { flex: 1; display: flex; gap: 6px; align-items: center; }
+    button { font: inherit; padding: 4px 10px; border: 1px solid #bbb; border-radius: 6px; background: #f6f6f6; cursor: pointer; }
+    button:hover { background: #eee; }
+    button:disabled { opacity: .5; cursor: default; }
+
+    #update { display: none; padding: 8px 12px; background: #edf6ee; border-bottom: 1px solid #cfe5d0; }
+    #update code { background: #fff; padding: 1px 4px; border-radius: 3px; }
+    #update .actions { margin-top: 6px; }
+
+    #log { max-height: 460px; overflow-y: auto; padding: 8px 12px; }
+    .unpack { margin-bottom: 10px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+    .unpack.jackpot { border: 2px solid var(--legendary); }
+    .unpack-head { display: flex; justify-content: space-between; padding: 4px 8px; font-size: 11px; color: var(--muted); background: #fafafa; }
+    .unpack-head a { color: var(--muted); }
+
+    .card { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-left: 4px solid var(--c); background: var(--bg); cursor: pointer; }
+    .card + .card { border-top: 1px solid rgba(0,0,0,.05); }
+    .card:hover { filter: brightness(.97); }
+    .cover { width: 30px; height: 30px; border-radius: 3px; object-fit: cover; flex: none; background: rgba(0,0,0,.08); }
+    .text { flex: 1; min-width: 0; line-height: 1.25; }
+    .title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .artist { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .badge { flex: none; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; padding: 2px 6px; border-radius: 10px; background: var(--c); color: #fff; }
+
+    .common    { --c: var(--common);    --bg: var(--common-bg); }
+    .common .badge { color: var(--common-ink); }
+    .uncommon  { --c: var(--uncommon);  --bg: var(--uncommon-bg); }
+    .rare      { --c: var(--rare);      --bg: var(--rare-bg); }
+    .epic      { --c: var(--epic);      --bg: var(--epic-bg); }
+    .legendary { --c: var(--legendary); --bg: var(--legendary-bg); }
+    .unknown   { --c: #999;             --bg: #f5f5f5; }
+
+    .error { margin-bottom: 10px; font-size: 12px; color: #a33; }
+    .error .time { color: var(--muted); font-size: 11px; margin-right: 6px; }
+    .empty { color: var(--muted); text-align: center; padding: 20px 0; }
+
+    footer { display: flex; gap: 8px; align-items: center; padding: 8px 12px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); }
+    footer span { flex: 1; }
+    footer button { font-size: 11px; padding: 2px 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <label><input type="checkbox" id="enabled"> Auto-open every 8 min</label>
+    <button id="now">Open now</button>
+  </header>
+
+  <div id="update">
+    <strong>Version <span id="latest"></span> is available.</strong><br>
+    Run <code>git pull</code> in the extension folder, then click Reload.
+    <div class="actions"><button class="reload">Reload extension</button></div>
+  </div>
+
+  <div id="log"></div>
+
+  <footer>
+    <span id="version"></span>
+    <button id="check">Check for updates</button>
+    <button class="reload">Reload</button>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
