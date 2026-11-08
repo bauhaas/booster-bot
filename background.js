@@ -19,7 +19,10 @@ async function schedule() {
   }
   chrome.alarms.create("update", { delayInMinutes: 0.2, periodInMinutes: UPDATE_CHECK_MIN });
 }
-chrome.runtime.onInstalled.addListener(schedule);
+chrome.runtime.onInstalled.addListener(async () => {
+  await backfillStats();
+  await schedule();
+});
 chrome.runtime.onStartup.addListener(schedule);
 
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -61,6 +64,7 @@ async function run(round = 0) {
         cover: d.cover_url,
         url: BASE + d.url,
       }));
+      await recordStats(entry.time, entry.draws.map((d) => d.rarity));
       const hits = data.draws.filter((d) => JACKPOT_RARITIES.includes(d.rarity));
       if (hits.length) {
         entry.jackpot = true;
@@ -169,6 +173,39 @@ async function getSiteTab() {
     chrome.tabs.onUpdated.addListener(listener);
   });
   return tab;
+}
+
+// ---- Stats ------------------------------------------------------------------
+// stats = { "2026-11-08": { boosters: 3, common: 9, uncommon: 6, rare: 3, ... }, ... }
+// Kept separately from the log so counts survive after the log is trimmed.
+function dayKey(iso) {
+  const d = new Date(iso);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+function addToStats(stats, iso, rarities) {
+  const day = (stats[dayKey(iso)] ??= { boosters: 0 });
+  day.boosters++;
+  for (const r of rarities) day[r] = (day[r] || 0) + 1;
+}
+
+async function recordStats(iso, rarities) {
+  const { stats = {} } = await chrome.storage.local.get("stats");
+  addToStats(stats, iso, rarities);
+  await chrome.storage.local.set({ stats });
+}
+
+// First run of v1.2: rebuild stats from whatever is still in the log.
+async function backfillStats() {
+  const { stats, log = [] } = await chrome.storage.local.get(["stats", "log"]);
+  if (stats) return;
+  const fresh = {};
+  for (const e of log) {
+    const rarities = e.draws ? e.draws.map((d) => d.rarity) : e.rarities;
+    if (!e.error && rarities?.length) addToStats(fresh, e.time, rarities);
+  }
+  await chrome.storage.local.set({ stats: fresh });
 }
 
 async function addLog(entry) {

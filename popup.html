@@ -51,6 +51,40 @@
     .error .time { color: var(--muted); font-size: 11px; margin-right: 6px; }
     .empty { color: var(--muted); text-align: center; padding: 20px 0; }
 
+    /* ---- Tabs ---- */
+    nav { display: flex; border-bottom: 1px solid var(--line); padding: 0 12px; }
+    nav button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; padding: 6px 10px; color: var(--muted); }
+    nav button:hover { background: none; color: #222; }
+    nav button.active { color: #222; border-bottom-color: #222; font-weight: 600; }
+    [hidden] { display: none !important; }
+
+    /* ---- Stats ---- */
+    #stats { padding: 10px 12px; max-height: 460px; overflow-y: auto; }
+    h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 4px 0 6px; font-weight: 600; }
+    h3 small { text-transform: none; letter-spacing: 0; font-weight: 400; }
+    .tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin-bottom: 14px; }
+    .tile { border: 1px solid var(--line); border-radius: 6px; padding: 5px 4px; text-align: center; }
+    .tile .n { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .tile .l { font-size: 10px; color: var(--muted); display: flex; gap: 3px; align-items: center; justify-content: center; }
+    .dot { width: 8px; height: 8px; border-radius: 2px; flex: none; background: var(--m); }
+    .m-common { --m: #c4993f; } .m-uncommon { --m: var(--uncommon); } .m-rare { --m: var(--rare); }
+    .m-epic { --m: var(--epic); } .m-legendary { --m: var(--legendary); }
+    .legend { display: flex; gap: 10px; flex-wrap: wrap; font-size: 11px; color: #444; margin-bottom: 4px; }
+    .legend span { display: flex; gap: 4px; align-items: center; }
+    .chart { position: relative; margin-bottom: 14px; }
+    .chart svg { display: block; }
+    .chart text { font-size: 9px; fill: var(--muted); }
+    .tip { position: absolute; pointer-events: none; background: #222; color: #fff; font-size: 11px; padding: 6px 8px; border-radius: 6px; white-space: nowrap; z-index: 2; }
+    .tip div { display: flex; gap: 6px; align-items: center; }
+    .tip b { margin-left: auto; padding-left: 10px; font-variant-numeric: tabular-nums; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+    th { font-size: 10px; font-weight: 600; color: var(--muted); text-align: right; padding: 3px 4px; border-bottom: 1px solid var(--line); }
+    th .dot { display: inline-block; margin-right: 3px; }
+    td { text-align: right; padding: 3px 4px; border-bottom: 1px solid #f2f2f2; }
+    th:first-child, td:first-child { text-align: left; }
+    td.zero { color: #ccc; }
+    td.hit { color: var(--legendary); font-weight: 700; }
+
     footer { display: flex; gap: 8px; align-items: center; padding: 8px 12px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); }
     footer span { flex: 1; }
     footer button { font-size: 11px; padding: 2px 8px; }
@@ -68,7 +102,24 @@
     <div class="actions"><button class="reload">Reload extension</button></div>
   </div>
 
+  <nav>
+    <button data-tab="log" class="active">History</button>
+    <button data-tab="stats">Stats</button>
+  </nav>
+
   <div id="log"></div>
+
+  <div id="stats" hidden>
+    <h3>All time <small id="boosters"></small></h3>
+    <div class="tiles" id="tiles"></div>
+
+    <h3>Cards per day <small>· last 14 days</small></h3>
+    <div class="legend" id="legend"></div>
+    <div class="chart" id="chart"></div>
+
+    <h3>By day</h3>
+    <table id="table"></table>
+  </div>
 
   <footer>
     <span id="version"></span>
