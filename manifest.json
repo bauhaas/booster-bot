@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Records Master Auto Booster",
-  "version": "1.2",
+  "version": "1.3",
   "description": "Opens a booster on recordsmaster.com every few minutes and alerts on legendary draws.",
   "permissions": ["alarms", "scripting", "notifications", "storage", "tabs"],
   "host_permissions": ["https://recordsmaster.com/*"],

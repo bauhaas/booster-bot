@@ -1,6 +1,6 @@
 # Records Master Auto Booster
 
-A Chrome extension that opens your [Records Master](https://recordsmaster.com) booster every 8 minutes, even overnight, and alerts you when you pull a **legendary**.
+A Chrome extension that opens your [Records Master](https://recordsmaster.com) booster every 10 minutes, even overnight, and alerts you when you pull a **legendary**.
 
 Click the extension icon to see every booster it opened, with colored cards for each rarity.
 

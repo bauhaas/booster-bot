@@ -1,7 +1,7 @@
 // ---- Settings -------------------------------------------------------------
 const BASE = "https://recordsmaster.com";
 const BOOSTER_PATH = "/fr/boosters";
-const PERIOD_MIN = 8;                   // how often to try opening a booster
+const PERIOD_MIN = 10;                  // how often to try opening a booster
 const JACKPOT_RARITIES = ["legendary"]; // rarities that trigger onJackpot()
 const MAX_LOG = 100;
 
